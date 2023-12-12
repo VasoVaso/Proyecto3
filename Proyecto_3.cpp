@@ -3,8 +3,12 @@
 #include <random>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
+using chrono::high_resolution_clock;
+using chrono::duration;
+using chrono::duration_cast;
 
 //--------------------------------- PROTOTIPOS ---------------------------------//
 
@@ -19,16 +23,16 @@ vector<int> inverselyOrderedModeFill(int size);
 
 // ALGORITMOS DE ORDENAMIENTOS
 
-void selectionSort(vector<int>& arr);
-void bubbleSort(vector<int>& arr);
-void insertionSort(vector<int>& arr);
-void shellSort(vector<int>& arr);
+double selectionSort(vector<int>& arr);
+double bubbleSort(vector<int>& arr);
+double insertionSort(vector<int>& arr);
+double shellSort(vector<int>& arr);
 
 void merge(vector<int>& arr, int left, int middle, int right);
-void mergeSort(vector<int>& arr, int left, int right);
-void quickSort(vector<int>& arr, int low, int high);
+double mergeSort(vector<int>& arr, int left, int right);
+double quickSort(vector<int>& arr, int low, int high);
 int partition(vector<int>& arr, int low, int high);
-void heapSort(vector<int>& arr);
+double heapSort(vector<int>& arr);
 void heapify(vector<int>& arr, int n, int i);
 
 //-------------------------------- FUNCIÓN MAIN --------------------------------//
@@ -56,6 +60,7 @@ int main()
     vector<int> events; 
 
     int option = 0, raceType = 0, raceMode = 0;
+    double timeTaken = 0;
 
     do
     {
@@ -102,21 +107,31 @@ int main()
 
             if (raceType == 0 && raceMode == 0) // !=
             {
-                vector<int> miVector = randomModeFill(10);
+
+                /*
+                vector<int> newVector = randomModeFill(10);
 
                 cout << "Vector ordenado: \n";
-                for (int i : miVector) {
+                for (int i : newVector) {
                     cout << i << " ";
                 }
 
-                heapSort(miVector);
-                //quickSort(miVector, 0, miVector.size() - 1);
+                //timeTaken = selectionSort(newVector);
+                //timeTaken = bubbleSort(newVector);
+                //timeTaken = insertionSort(newVector);
+                //timeTaken = shellSort(newVector);
+                //timeTaken = mergeSort(newVector, 0, newVector.size()-1);              
+                //timeTaken = quickSort(newVector, 0, newVector.size() - 1);
+                //timeTaken = heapSort(newVector);
 
                 // Mostrar el vector ordenado
                 cout << "\n\nVector ordenado: \n";
-                for (int i : miVector) {
-                    std::cout << i << " ";
+                for (int i : newVector) {
+                    cout << i << " ";
                 }
+
+                cout << "\nExecution time: " << timeTaken << " seconds\n\n" << endl;
+                */
             }
             else
             {
@@ -280,9 +295,12 @@ vector<int> inverselyOrderedModeFill(int size)
     return vector;
 }
 
-void selectionSort(vector<int>& arr)
+double selectionSort(vector<int>& arr)
 {
     int n = arr.size();
+
+    auto start = high_resolution_clock::now();
+
     for (int i = 0; i < n; ++i)
     {
         for (int j = i; j < n; ++j)
@@ -295,12 +313,17 @@ void selectionSort(vector<int>& arr)
             }
         }
     }
+
+    auto end = high_resolution_clock::now();
+    return duration_cast<duration<double>>(end - start).count();
 }
 
-void bubbleSort(vector<int>& arr) 
+double bubbleSort(vector<int>& arr) 
 {
     int n = arr.size();
     bool swapped;
+
+    auto start = high_resolution_clock::now();
 
     for (int i = 0; i < n - 1; ++i) 
     {
@@ -322,11 +345,16 @@ void bubbleSort(vector<int>& arr)
             break;
         }
     }
+
+    auto end = high_resolution_clock::now();
+    return duration_cast<duration<double>>(end - start).count();
 }
 
-void insertionSort(vector<int>& arr) 
+double insertionSort(vector<int>& arr) 
 {
     int n = arr.size();
+
+    auto start = high_resolution_clock::now();
 
     for (int i = 1; i < n; i++) 
     {
@@ -340,11 +368,16 @@ void insertionSort(vector<int>& arr)
         }
         arr[j + 1] = key;
     }
+
+    auto end = high_resolution_clock::now();
+    return duration_cast<duration<double>>(end - start).count();
 }
 
-void shellSort(vector<int>& arr) 
+double shellSort(vector<int>& arr) 
 {
     int n = arr.size();
+
+    auto start = high_resolution_clock::now();
 
     for (int gap = n / 2; gap > 0; gap /= 2) 
     {
@@ -360,10 +393,15 @@ void shellSort(vector<int>& arr)
             arr[j] = temp;
         }
     }
+
+    auto end = high_resolution_clock::now();
+    return duration_cast<duration<double>>(end - start).count();
 }
 
-void mergeSort(vector<int>& arr, int left, int right) 
+double mergeSort(vector<int>& arr, int left, int right) 
 {
+    auto start = high_resolution_clock::now();
+
     if (left < right) 
     {
         int middle = left + (right - left) / 2;
@@ -374,6 +412,9 @@ void mergeSort(vector<int>& arr, int left, int right)
 
         merge(arr, left, middle, right);
     }
+
+    auto end = high_resolution_clock::now();
+    return duration_cast<duration<double>>(end - start).count();
 }
 
 void merge(vector<int>& arr, int left, int middle, int right) 
@@ -428,8 +469,10 @@ void merge(vector<int>& arr, int left, int middle, int right)
     }
 }
 
-void quickSort(vector<int>& arr, int low, int high)
+double quickSort(vector<int>& arr, int low, int high)
 {
+    auto start = high_resolution_clock::now();
+
     if (low < high)
     {
         int pivotIndex = partition(arr, low, high);
@@ -437,6 +480,9 @@ void quickSort(vector<int>& arr, int low, int high)
         quickSort(arr, low, pivotIndex - 1);
         quickSort(arr, pivotIndex + 1, high);
     }
+
+    auto end = high_resolution_clock::now();
+    return duration_cast<duration<double>>(end - start).count();
 }
 
 int partition(vector<int>& arr, int low, int high)
@@ -457,9 +503,11 @@ int partition(vector<int>& arr, int low, int high)
     return (i + 1);
 }
 
-void heapSort(vector<int>& arr) 
+double heapSort(vector<int>& arr) 
 {
     int n = arr.size();
+
+    auto start = high_resolution_clock::now();
 
     for (int i = n / 2 - 1; i >= 0; i--)
     {
@@ -472,6 +520,9 @@ void heapSort(vector<int>& arr)
 
         heapify(arr, i, 0);
     }
+
+    auto end = high_resolution_clock::now();
+    return duration_cast<duration<double>>(end - start).count();
 }
 
 void heapify(vector<int>& arr, int n, int i) 
