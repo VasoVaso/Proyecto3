@@ -2,12 +2,17 @@
 #include <chrono>
 #include <random>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 //--------------------------------- PROTOTIPOS ---------------------------------//
 
 int getRandom(int min, int max);
+vector<int> randomModeFill(int size);
+vector<int> randomDuplicateModeFill(int size, int min, int max);
+vector<int> orderedModeFill(int size);
+vector<int> inverselyOrderedModeFill(int size);
 
 //-------------------------------- FUNCIÓN MAIN --------------------------------//
 
@@ -23,13 +28,15 @@ int main()
 
     const int minEvents = 60000;
     const int maxEvents = 80000;
-    int randomEvents = getRandom(minEvents, maxEvents);
+    int randomEvents = getRandom(minEvents, maxEvents);*/
+    
+    const int minQueue = 1;
+    const int maxQueue = 10;
+    int randomQueue = getRandom(minQueue, maxQueue);
 
     vector<int> playersQueue;
     vector<int> objects;
-    vector<int> events; */
-
-
+    vector<int> events; 
 
     int option = 0, raceType = 0, raceMode = 0;
 
@@ -45,7 +52,7 @@ int main()
 
             if (raceType != 0 && raceMode != 0)
             {
-
+                
             }
             else
             {
@@ -149,4 +156,61 @@ int getRandom(int min, int max)
     uniform_int_distribution<int> distribution(min, max);
 
     return distribution(generator);
+}
+
+vector<int> randomModeFill(int size) 
+{
+    vector<int> result;
+
+    for (int i = 1; i <= size; i++) 
+    {
+        result.push_back(i);
+    }
+
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(result.begin(), result.end(), g);
+
+    return result;
+}
+
+vector<int> randomDuplicateModeFill(int size, int min, int max)
+{
+    vector<int> vector;
+
+    random_device rd;
+    mt19937 generator(rd());
+    uniform_int_distribution<int> distribution(min, max);
+
+    for (int i = 0; i < size; i++)
+    {
+        int randomNum = distribution(generator);
+        vector.push_back(randomNum);
+    }
+
+    return vector;
+}
+
+vector<int> orderedModeFill(int size) 
+{
+    vector<int> vector;
+
+    for (int i = 1; i <= size; i++) 
+    {
+        vector.push_back(i);
+    }
+
+    return vector;
+}
+
+vector<int> inverselyOrderedModeFill(int size) 
+{
+    vector<int> vector;
+
+    for (int i = size; i >= 1; i--) 
+    {
+        vector.push_back(i);
+    }
+
+    return vector;
 }
