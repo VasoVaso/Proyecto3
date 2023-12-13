@@ -3,7 +3,7 @@
 #include <random>
 #include <vector>
 #include <algorithm>
-#include <chrono>
+#include <stack>
 
 using namespace std;
 using chrono::high_resolution_clock;
@@ -33,6 +33,7 @@ double mergeSort(vector<int>& arr, int left, int right);
 void merge(vector<int>& arr, int left, int middle, int right);
 double quickSort(vector<int>& arr, int low, int high);
 int partition(vector<int>& arr, int low, int high);
+void swap(int& a, int& b);
 double heapSort(vector<int>& arr);
 void heapify(vector<int>& arr, int n, int i);
 
@@ -40,22 +41,21 @@ void heapify(vector<int>& arr, int n, int i);
 
 int main()
 {
-    const int minQueue = 10000;
-    const int maxQueue = 11000;
+    const int minQueue = 100000;
+    const int maxQueue = 110000;
     int randomQueueNum = 0;
 
-    const int minObjects = 1000*15;
-    const int maxObjects = 1500*15;
+    const int minObjects = 1000 * 15;
+    const int maxObjects = 1500 * 15;
     int randomObjectsNum = 0;
 
-    const int minEvents = 6000;
-    const int maxEvents = 8000;
+    const int minEvents = 60000;
+    const int maxEvents = 80000;
     int randomEventsNum = 0;
 
     vector<int> playersQueue;
     vector<int> objects;
     vector<int> events;
-
     vector<int> aux;
 
     int option = 0, raceType = 0, raceMode = 0;
@@ -64,7 +64,7 @@ int main()
     {
         cout << "   ALGORITHMS RACE             | Race: ";
         switch (raceType)
-        {   
+        {
         case 1:
             cout << "Queue |";
             break;
@@ -77,7 +77,7 @@ int main()
         default:
             cout << "None |";
             break;
-        } 
+        }
         switch (raceMode)
         {
         case 1:
@@ -112,83 +112,95 @@ int main()
 
                 switch (raceMode)
                 {
-                case 1:
+                case 1: // ALEATORIO
                     if (raceType == 1)
                     {
+                        cout << ">> Starting Random Race with " << randomQueueNum << " players in queue.\n" << endl;
                         playersQueue = randomModeFill(randomQueueNum);
                         initRace(aux, playersQueue);
                     }
                     else if (raceType == 2)
                     {
+                        cout << ">> Starting Random Race with " << randomObjectsNum << " objects merging.\n" << endl;
                         objects = randomModeFill(randomObjectsNum);
                         initRace(aux, objects);
                     }
                     else
                     {
+                        cout << ">> Starting Random Race with " << randomEventsNum << " events to explore.\n" << endl;
                         events = randomModeFill(randomEventsNum);
                         initRace(aux, events);
                     }
                     break;
-                case 2:
+                case 2: // ALEATORIO CON DUPLICADOS
                     if (raceType == 1)
                     {
+                        cout << ">> Starting Random with Duplicates Race with " << randomQueueNum << " players in queue.\n" << endl;
                         playersQueue = randomDuplicateModeFill(randomQueueNum, minQueue, maxQueue);
                         initRace(aux, playersQueue);
                     }
                     else if (raceType == 2)
                     {
+                        cout << ">> Starting Random with Duplicates Race with " << randomObjectsNum << " objects merging.\n" << endl;
                         objects = randomDuplicateModeFill(randomObjectsNum, minObjects, maxObjects);
                         initRace(aux, objects);
                     }
                     else
                     {
+                        cout << ">> Starting Random with Duplicates Race with " << randomEventsNum << " events to explore.\n" << endl;
                         events = randomDuplicateModeFill(randomEventsNum, minEvents, maxEvents);
                         initRace(aux, events);
                     }
                     break;
-                case 3:
+                case 3: // ORDENADO
                     if (raceType == 1)
                     {
+                        cout << ">> Starting Ordered Race with " << randomQueueNum << " players in queue.\n" << endl;
                         playersQueue = orderedModeFill(randomQueueNum);
                         initRace(aux, playersQueue);
                     }
                     else if (raceType == 2)
                     {
+                        cout << ">> Starting Ordered Race with " << randomObjectsNum << " objects merging.\n" << endl;
                         objects = orderedModeFill(randomObjectsNum);
                         initRace(aux, objects);
                     }
                     else
                     {
+                        cout << ">> Starting Ordered Race with " << randomEventsNum << " events to explore.\n" << endl;
                         events = orderedModeFill(randomEventsNum);
                         initRace(aux, events);
                     }
                     break;
-                case 4:
+                case 4: // INVERSAMENTE ORDENADO
                     if (raceType == 1)
                     {
+                        cout << ">> Starting Inversely Ordered Race with " << randomQueueNum << " players in queue.\n" << endl;
                         playersQueue = inverselyOrderedModeFill(randomQueueNum);
                         initRace(aux, playersQueue);
                     }
                     else if (raceType == 2)
                     {
+                        cout << ">> Starting Inversely Ordered Race with " << randomObjectsNum << " objects merging.\n" << endl;
                         objects = inverselyOrderedModeFill(randomObjectsNum);
                         initRace(aux, objects);
                     }
                     else
                     {
+                        cout << ">> Starting Inversely Ordered Race with " << randomEventsNum << " events to explore.\n" << endl;
                         events = inverselyOrderedModeFill(randomEventsNum);
                         initRace(aux, events);
                     }
                     break;
                 default:
                     break;
-                }           
+                }
             }
             else
             {
                 cout << "\n>> Before starting, you must choose a race and the race mode.\n" << endl;
             }
-            
+
             cout << "\n" << endl;
             system("pause");
             system("cls");
@@ -221,7 +233,7 @@ int main()
                 default:
                     break;
                 }
-                
+
                 system("cls");
             } while (option != 4);
             option = 0;
@@ -289,11 +301,11 @@ int getRandom(int min, int max)
     return distribution(generator);
 }
 
-vector<int> randomModeFill(int size) 
+vector<int> randomModeFill(int size)
 {
     vector<int> result;
 
-    for (int i = 1; i <= size; ++i) 
+    for (int i = 1; i <= size; ++i)
     {
         result.push_back(i);
     }
@@ -322,11 +334,11 @@ vector<int> randomDuplicateModeFill(int size, int min, int max)
     return vector;
 }
 
-vector<int> orderedModeFill(int size) 
+vector<int> orderedModeFill(int size)
 {
     vector<int> vector;
 
-    for (int i = 1; i <= size; ++i) 
+    for (int i = 1; i <= size; ++i)
     {
         vector.push_back(i);
     }
@@ -334,11 +346,11 @@ vector<int> orderedModeFill(int size)
     return vector;
 }
 
-vector<int> inverselyOrderedModeFill(int size) 
+vector<int> inverselyOrderedModeFill(int size)
 {
     vector<int> vector;
 
-    for (int i = size; i >= 1; --i) 
+    for (int i = size; i >= 1; --i)
     {
         vector.push_back(i);
     }
@@ -369,20 +381,20 @@ double selectionSort(vector<int>& arr)
     return duration_cast<duration<double>>(end - start).count();
 }
 
-double bubbleSort(vector<int>& arr) 
+double bubbleSort(vector<int>& arr)
 {
     int n = arr.size();
     bool swapped;
 
     auto start = high_resolution_clock::now();
 
-    for (int i = 0; i < n - 1; ++i) 
+    for (int i = 0; i < n - 1; ++i)
     {
         swapped = false;
 
-        for (int j = 0; j < n - i - 1; ++j) 
+        for (int j = 0; j < n - i - 1; ++j)
         {
-            if (arr[j] > arr[j + 1]) 
+            if (arr[j] > arr[j + 1])
             {
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
@@ -391,7 +403,7 @@ double bubbleSort(vector<int>& arr)
             }
         }
 
-        if (!swapped) 
+        if (!swapped)
         {
             break;
         }
@@ -401,18 +413,18 @@ double bubbleSort(vector<int>& arr)
     return duration_cast<duration<double>>(end - start).count();
 }
 
-double insertionSort(vector<int>& arr) 
+double insertionSort(vector<int>& arr)
 {
     int n = arr.size();
 
     auto start = high_resolution_clock::now();
 
-    for (int i = 1; i < n; i++) 
+    for (int i = 1; i < n; i++)
     {
         int key = arr[i];
         int j = i - 1;
 
-        while (j >= 0 && arr[j] > key) 
+        while (j >= 0 && arr[j] > key)
         {
             arr[j + 1] = arr[j];
             j = j - 1;
@@ -424,20 +436,20 @@ double insertionSort(vector<int>& arr)
     return duration_cast<duration<double>>(end - start).count();
 }
 
-double shellSort(vector<int>& arr) 
+double shellSort(vector<int>& arr)
 {
     int n = arr.size();
 
     auto start = high_resolution_clock::now();
 
-    for (int gap = n / 2; gap > 0; gap /= 2) 
+    for (int gap = n / 2; gap > 0; gap /= 2)
     {
         for (int i = gap; i < n; i++)
         {
             int temp = arr[i];
             int j;
 
-            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) 
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap)
             {
                 arr[j] = arr[j - gap];
             }
@@ -449,11 +461,11 @@ double shellSort(vector<int>& arr)
     return duration_cast<duration<double>>(end - start).count();
 }
 
-double mergeSort(vector<int>& arr, int left, int right) 
+double mergeSort(vector<int>& arr, int left, int right)
 {
     auto start = high_resolution_clock::now();
 
-    if (left < right) 
+    if (left < right)
     {
         int middle = left + (right - left) / 2;
 
@@ -468,7 +480,7 @@ double mergeSort(vector<int>& arr, int left, int right)
     return duration_cast<duration<double>>(end - start).count();
 }
 
-void merge(vector<int>& arr, int left, int middle, int right) 
+void merge(vector<int>& arr, int left, int middle, int right)
 {
     int n1 = middle - left + 1;
     int n2 = right - middle;
@@ -480,24 +492,24 @@ void merge(vector<int>& arr, int left, int middle, int right)
     {
         leftArray[i] = arr[left + i];
     }
-        
+
     for (int j = 0; j < n2; j++)
     {
         rightArray[j] = arr[middle + 1 + j];
     }
-        
+
     int i = 0;
     int j = 0;
     int k = left;
 
-    while (i < n1 && j < n2) 
+    while (i < n1 && j < n2)
     {
-        if (leftArray[i] <= rightArray[j]) 
+        if (leftArray[i] <= rightArray[j])
         {
             arr[k] = leftArray[i];
             i++;
         }
-        else 
+        else
         {
             arr[k] = rightArray[j];
             j++;
@@ -505,14 +517,14 @@ void merge(vector<int>& arr, int left, int middle, int right)
         k++;
     }
 
-    while (i < n1) 
+    while (i < n1)
     {
         arr[k] = leftArray[i];
         i++;
         k++;
     }
 
-    while (j < n2) 
+    while (j < n2)
     {
         arr[k] = rightArray[j];
         j++;
@@ -524,12 +536,22 @@ double quickSort(vector<int>& arr, int low, int high)
 {
     auto start = high_resolution_clock::now();
 
-    if (low < high)
-    {
-        int pivotIndex = partition(arr, low, high);
+    stack<pair<int, int>> st;
+    st.push({ low, high });
 
-        quickSort(arr, low, pivotIndex - 1);
-        quickSort(arr, pivotIndex + 1, high);
+    while (!st.empty())
+    {
+        low = st.top().first;
+        high = st.top().second;
+        st.pop();
+
+        if (low < high)
+        {
+            int pivotIndex = partition(arr, low, high);
+
+            st.push({ low, pivotIndex - 1 });
+            st.push({ pivotIndex + 1, high });
+        }
     }
 
     auto end = high_resolution_clock::now();
@@ -539,10 +561,9 @@ double quickSort(vector<int>& arr, int low, int high)
 int partition(vector<int>& arr, int low, int high)
 {
     int pivot = arr[high];
+    int i = low - 1;
 
-    int i = (low - 1);
-
-    for (int j = low; j <= high; j++)
+    for (int j = low; j <= high - 1; j++)
     {
         if (arr[j] < pivot)
         {
@@ -554,7 +575,14 @@ int partition(vector<int>& arr, int low, int high)
     return (i + 1);
 }
 
-double heapSort(vector<int>& arr) 
+void swap(int& a, int& b)
+{
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+double heapSort(vector<int>& arr)
 {
     int n = arr.size();
 
@@ -565,9 +593,9 @@ double heapSort(vector<int>& arr)
         heapify(arr, n, i);
     }
 
-    for (int i = n - 1; i > 0; i--) 
+    for (int i = n - 1; i > 0; i--)
     {
-        swap(arr[0], arr[i]); 
+        swap(arr[0], arr[i]);
 
         heapify(arr, i, 0);
     }
@@ -576,7 +604,7 @@ double heapSort(vector<int>& arr)
     return duration_cast<duration<double>>(end - start).count();
 }
 
-void heapify(vector<int>& arr, int n, int i) 
+void heapify(vector<int>& arr, int n, int i)
 {
     int largest = i;
     int left = 2 * i + 1;
@@ -586,13 +614,13 @@ void heapify(vector<int>& arr, int n, int i)
     {
         largest = left;
     }
-        
+
     if (right < n && arr[right] > arr[largest])
     {
         largest = right;
     }
-        
-    if (largest != i) 
+
+    if (largest != i)
     {
         swap(arr[i], arr[largest]);
         heapify(arr, n, largest);
@@ -603,11 +631,10 @@ void initRace(vector<int>& aux, vector<int>& arr)
 {
     double timeTaken[7];
     int timeTakenIndex = 0;
-    cout << ">> Starting Race with " << arr.size() << " players in queue.\n" << endl;
 
     aux = arr;
     timeTaken[0] = selectionSort(arr);
-    cout << "1. Selecting Sort, " << timeTaken[0] << endl;
+    cout << "1. Selection Sort, " << timeTaken[0] << endl;
     arr = aux;
     timeTaken[1] = bubbleSort(arr);
     cout << "2. Bubble Sort, " << timeTaken[1] << endl;
@@ -628,7 +655,7 @@ void initRace(vector<int>& aux, vector<int>& arr)
     cout << "7. Heap Sort, " << timeTaken[6] << endl;
 
     double fastestTime = timeTaken[0];
-    
+
     for (int i = 0; i < 7; i++)
     {
         if (fastestTime > timeTaken[i])
@@ -637,7 +664,7 @@ void initRace(vector<int>& aux, vector<int>& arr)
             timeTakenIndex = i;
         }
     }
-    
+
     switch (timeTakenIndex)
     {
     case 0:
@@ -659,7 +686,7 @@ void initRace(vector<int>& aux, vector<int>& arr)
         cout << "\n>> The winner algorithm is Quick Sort with a time of " << timeTaken[5] << " seconds!" << endl;
         break;
     case 6:
-        cout << "\n>> The winner algorithm is heap Sort with a time of " << timeTaken[6] << " seconds!" << endl;
+        cout << "\n>> The winner algorithm is Heap Sort with a time of " << timeTaken[6] << " seconds!" << endl;
         break;
     default:
         break;
