@@ -8,11 +8,12 @@
 using namespace std;
 using chrono::high_resolution_clock;
 using chrono::duration;
-using chrono::duration_cast;
+using chrono::duration_cast;
 
 //--------------------------------- PROTOTIPOS ---------------------------------//
 
 int getRandom(int min, int max);
+void initRace(vector<int>& aux, vector<int>& arr);
 
 // CREACIÓN DE VECTORES
 
@@ -28,8 +29,8 @@ double bubbleSort(vector<int>& arr);
 double insertionSort(vector<int>& arr);
 double shellSort(vector<int>& arr);
 
-void merge(vector<int>& arr, int left, int middle, int right);
 double mergeSort(vector<int>& arr, int left, int right);
+void merge(vector<int>& arr, int left, int middle, int right);
 double quickSort(vector<int>& arr, int low, int high);
 int partition(vector<int>& arr, int low, int high);
 double heapSort(vector<int>& arr);
@@ -38,29 +39,26 @@ void heapify(vector<int>& arr, int n, int i);
 //-------------------------------- FUNCIÓN MAIN --------------------------------//
 
 int main()
-{/*
-    const int minQueue = 100000;
-    const int maxQueue = 110000;
-    int randomQueue = getRandom(minQueue, maxQueue);
+{
+    const int minQueue = 10000;
+    const int maxQueue = 11000;
+    int randomQueueNum = 0;
 
     const int minObjects = 1000*15;
     const int maxObjects = 1500*15;
-    int randomObjects = getRandom(minObjects, maxObjects);
+    int randomObjectsNum = 0;
 
-    const int minEvents = 60000;
-    const int maxEvents = 80000;
-    int randomEvents = getRandom(minEvents, maxEvents);*/
-
-    const int minQueue = 1;
-    const int maxQueue = 20;
-    int randomQueue = getRandom(minQueue, maxQueue);
+    const int minEvents = 6000;
+    const int maxEvents = 8000;
+    int randomEventsNum = 0;
 
     vector<int> playersQueue;
     vector<int> objects;
-    vector<int> events; 
+    vector<int> events;
+
+    vector<int> aux;
 
     int option = 0, raceType = 0, raceMode = 0;
-    double timeTaken = 0;
 
     do
     {
@@ -102,36 +100,89 @@ int main()
         cin >> option;
         switch (option)
         {
-        case 1:
+        case 1: // COMENZAR CARRERA
             system("cls");
 
-            if (raceType == 0 && raceMode == 0) // !=
+            randomQueueNum = getRandom(minQueue, maxQueue);
+            randomObjectsNum = getRandom(minObjects, maxObjects);
+            randomEventsNum = getRandom(minEvents, maxEvents);
+
+            if (raceType != 0 && raceMode != 0)
             {
 
-                /*
-                vector<int> newVector = randomModeFill(10);
-
-                cout << "Vector ordenado: \n";
-                for (int i : newVector) {
-                    cout << i << " ";
-                }
-
-                //timeTaken = selectionSort(newVector);
-                //timeTaken = bubbleSort(newVector);
-                //timeTaken = insertionSort(newVector);
-                //timeTaken = shellSort(newVector);
-                //timeTaken = mergeSort(newVector, 0, newVector.size()-1);              
-                //timeTaken = quickSort(newVector, 0, newVector.size() - 1);
-                //timeTaken = heapSort(newVector);
-
-                // Mostrar el vector ordenado
-                cout << "\n\nVector ordenado: \n";
-                for (int i : newVector) {
-                    cout << i << " ";
-                }
-
-                cout << "\nExecution time: " << timeTaken << " seconds\n\n" << endl;
-                */
+                switch (raceMode)
+                {
+                case 1:
+                    if (raceType == 1)
+                    {
+                        playersQueue = randomModeFill(randomQueueNum);
+                        initRace(aux, playersQueue);
+                    }
+                    else if (raceType == 2)
+                    {
+                        objects = randomModeFill(randomObjectsNum);
+                        initRace(aux, objects);
+                    }
+                    else
+                    {
+                        events = randomModeFill(randomEventsNum);
+                        initRace(aux, events);
+                    }
+                    break;
+                case 2:
+                    if (raceType == 1)
+                    {
+                        playersQueue = randomDuplicateModeFill(randomQueueNum, minQueue, maxQueue);
+                        initRace(aux, playersQueue);
+                    }
+                    else if (raceType == 2)
+                    {
+                        objects = randomDuplicateModeFill(randomObjectsNum, minObjects, maxObjects);
+                        initRace(aux, objects);
+                    }
+                    else
+                    {
+                        events = randomDuplicateModeFill(randomEventsNum, minEvents, maxEvents);
+                        initRace(aux, events);
+                    }
+                    break;
+                case 3:
+                    if (raceType == 1)
+                    {
+                        playersQueue = orderedModeFill(randomQueueNum);
+                        initRace(aux, playersQueue);
+                    }
+                    else if (raceType == 2)
+                    {
+                        objects = orderedModeFill(randomObjectsNum);
+                        initRace(aux, objects);
+                    }
+                    else
+                    {
+                        events = orderedModeFill(randomEventsNum);
+                        initRace(aux, events);
+                    }
+                    break;
+                case 4:
+                    if (raceType == 1)
+                    {
+                        playersQueue = inverselyOrderedModeFill(randomQueueNum);
+                        initRace(aux, playersQueue);
+                    }
+                    else if (raceType == 2)
+                    {
+                        objects = inverselyOrderedModeFill(randomObjectsNum);
+                        initRace(aux, objects);
+                    }
+                    else
+                    {
+                        events = inverselyOrderedModeFill(randomEventsNum);
+                        initRace(aux, events);
+                    }
+                    break;
+                default:
+                    break;
+                }           
             }
             else
             {
@@ -142,7 +193,7 @@ int main()
             system("pause");
             system("cls");
             break;
-        case 2:
+        case 2: // SELECCIÓN DE CARRERA
             system("cls");
 
             do
@@ -152,17 +203,17 @@ int main()
                 cin >> option;
                 switch (option)
                 {
-                case 1:
+                case 1: // COLAS
                     raceType = 1;
                     cout << "\n>> You have selected the Queue Race.\n" << endl;
                     system("pause");
                     break;
-                case 2:
+                case 2: // OBJETOS
                     raceType = 2;
                     cout << "\n>> You have selected the Object Race.\n" << endl;
                     system("pause");
                     break;
-                case 3:
+                case 3: // EVENTOS
                     raceType = 3;
                     cout << "\n>> You have selected the Event Race.\n" << endl;
                     system("pause");
@@ -177,7 +228,7 @@ int main()
 
             system("cls");
             break;
-        case 3:
+        case 3: // SELECCIÓN DE MODO
             system("cls");
 
             do
@@ -187,22 +238,22 @@ int main()
                 cin >> option;
                 switch (option)
                 {
-                case 1:
+                case 1: // ALEATORIO
                     raceMode = 1;
                     cout << "\n>> You have selected the Random Mode.\n" << endl;
                     system("pause");
                     break;
-                case 2:
+                case 2: // ALEATORIO CON DUPLICADOS
                     raceMode = 2;
                     cout << "\n>> You have selected the Random with Duplicates Mode.\n" << endl;
                     system("pause");
                     break;
-                case 3:
+                case 3: // ORDENADO
                     raceMode = 3;
                     cout << "\n>> You have selected the Ordered Mode.\n" << endl;
                     system("pause");
                     break;
-                case 4:
+                case 4: // INVERSAMENTE ORDENADO
                     raceMode = 4;
                     cout << "\n>> You have selected the Inversely Ordered Mode.\n" << endl;
                     system("pause");
@@ -545,5 +596,72 @@ void heapify(vector<int>& arr, int n, int i)
     {
         swap(arr[i], arr[largest]);
         heapify(arr, n, largest);
+    }
+}
+
+void initRace(vector<int>& aux, vector<int>& arr)
+{
+    double timeTaken[7];
+    int timeTakenIndex = 0;
+    cout << ">> Starting Race with " << arr.size() << " players in queue.\n" << endl;
+
+    aux = arr;
+    timeTaken[0] = selectionSort(arr);
+    cout << "1. Selecting Sort, " << timeTaken[0] << endl;
+    arr = aux;
+    timeTaken[1] = bubbleSort(arr);
+    cout << "2. Bubble Sort, " << timeTaken[1] << endl;
+    arr = aux;
+    timeTaken[2] = insertionSort(arr);
+    cout << "3. Insertion Sort, " << timeTaken[2] << endl;
+    arr = aux;
+    timeTaken[3] = shellSort(arr);
+    cout << "4. Shell Sort, " << timeTaken[3] << endl;
+    arr = aux;
+    timeTaken[4] = mergeSort(arr, 0, arr.size() - 1);
+    cout << "5. Merge Sort, " << timeTaken[4] << endl;
+    arr = aux;
+    timeTaken[5] = quickSort(arr, 0, arr.size() - 1);
+    cout << "6. Quick Sort, " << timeTaken[5] << endl;
+    arr = aux;
+    timeTaken[6] = heapSort(arr);
+    cout << "7. Heap Sort, " << timeTaken[6] << endl;
+
+    double fastestTime = timeTaken[0];
+    
+    for (int i = 0; i < 7; i++)
+    {
+        if (fastestTime > timeTaken[i])
+        {
+            fastestTime = timeTaken[i];
+            timeTakenIndex = i;
+        }
+    }
+    
+    switch (timeTakenIndex)
+    {
+    case 0:
+        cout << "\n>> The winner algorithm is Selection Sort with a time of " << timeTaken[0] << " seconds!" << endl;
+        break;
+    case 1:
+        cout << "\n>> The winner algorithm is Bubble Sort with a time of " << timeTaken[1] << " seconds!" << endl;
+        break;
+    case 2:
+        cout << "\n>> The winner algorithm is Insertion Sort with a time of " << timeTaken[2] << " seconds!" << endl;
+        break;
+    case 3:
+        cout << "\n>> The winner algorithm is Shell Sort with a time of " << timeTaken[3] << " seconds!" << endl;
+        break;
+    case 4:
+        cout << "\n>> The winner algorithm is Merge Sort with a time of " << timeTaken[4] << " seconds!" << endl;
+        break;
+    case 5:
+        cout << "\n>> The winner algorithm is Quick Sort with a time of " << timeTaken[5] << " seconds!" << endl;
+        break;
+    case 6:
+        cout << "\n>> The winner algorithm is heap Sort with a time of " << timeTaken[6] << " seconds!" << endl;
+        break;
+    default:
+        break;
     }
 }
