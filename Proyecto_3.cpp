@@ -12,9 +12,6 @@ using chrono::duration_cast;
 
 //--------------------------------- PROTOTIPOS ---------------------------------//
 
-int getRandom(int min, int max);
-void initRace(vector<int>& aux, vector<int>& arr);
-
 // CREACIÓN DE VECTORES
 
 vector<int> randomModeFill(int size);
@@ -37,10 +34,16 @@ void swap(int& a, int& b);
 double heapSort(vector<int>& arr);
 void heapify(vector<int>& arr, int n, int i);
 
+// OTRAS FUNCIONES
+
+int getRandom(int min, int max);
+void initRace(vector<int>& aux, vector<int>& arr);
+
 //-------------------------------- FUNCIÓN MAIN --------------------------------//
 
 int main()
 {
+    // DEFINIR LÍMITES INFERIORES Y SUPERIORES PARA CADA VECTOR
     const int minQueue = 100000;
     const int maxQueue = 110000;
     int randomQueueNum = 0;
@@ -59,11 +62,24 @@ int main()
     vector<int> aux;
 
     int option = 0, raceType = 0, raceMode = 0;
+    /*
+    raceType = 0: Ninguna carrera seleccionada
+    raceType = 1: Seleccionado Vector de Cola
+    raceType = 2: Seleccionado Vector de Objetos
+    raceType = 3: Seleccionado Vector de Eventos
 
+    raceMode = 0: Ningún modo seleccionado
+    raceMode = 1: Modo aleatorio
+    raceMode = 2: Modo aleatorio con duplicados
+    raceMode = 3: Modo ordenado
+    raceMode = 4: Modo inversamente ordenado
+    */
+
+    // MENÚ PRINCIPAL
     do
     {
         cout << "   ALGORITHMS RACE             | Race: ";
-        switch (raceType)
+        switch (raceType) // SWITCH PARA INDICAR SI EL TIPO DE CARRERA FUE SELCCIONADO
         {
         case 1:
             cout << "Queue |";
@@ -78,7 +94,7 @@ int main()
             cout << "None |";
             break;
         }
-        switch (raceMode)
+        switch (raceMode)// SWITCH PARA INDICAR SI EL MODO DE CARRERA FUE SELCCIONADO
         {
         case 1:
             cout << " Mode: Random";
@@ -103,13 +119,13 @@ int main()
         case 1: // COMENZAR CARRERA
             system("cls");
 
+            // AL MOMENTO DE INICIAR UNA CARRERA NUEVA, SE OBTIENEN ALEATORIAMENTE LA CANTIDAD DE ELEMENTOS DE LOS VECTORES
             randomQueueNum = getRandom(minQueue, maxQueue);
             randomObjectsNum = getRandom(minObjects, maxObjects);
             randomEventsNum = getRandom(minEvents, maxEvents);
 
             if (raceType != 0 && raceMode != 0)
             {
-
                 switch (raceMode)
                 {
                 case 1: // ALEATORIO
@@ -291,32 +307,24 @@ int main()
 
 //--------------------------------- FUNCIONES ---------------------------------//
 
-int getRandom(int min, int max)
-{
-    random_device rd;
-    mt19937 generator(rd());
-
-    uniform_int_distribution<int> distribution(min, max);
-
-    return distribution(generator);
-}
-
+// FUNCIÓN PARA RELLENAR UN VECTOR CON NÚMEROS ALEATORIOS IRREPETIBLES
 vector<int> randomModeFill(int size)
 {
-    vector<int> result;
+    vector<int> vector;
 
     for (int i = 1; i <= size; ++i)
     {
-        result.push_back(i);
+        vector.push_back(i);
     }
 
     random_device rd;
     mt19937 g(rd());
-    shuffle(result.begin(), result.end(), g);
+    shuffle(vector.begin(), vector.end(), g);
 
-    return result;
+    return vector;
 }
 
+// FUNCIÓN PARA RELLENAR UN VECTOR CON NÚMEROS ALEATORIOS REPETIBLES
 vector<int> randomDuplicateModeFill(int size, int min, int max)
 {
     vector<int> vector;
@@ -334,6 +342,7 @@ vector<int> randomDuplicateModeFill(int size, int min, int max)
     return vector;
 }
 
+// FUNCIÓN PARA RELLENAR UN VECTOR CON NÚMEROS ORDENADOS DE MENOR A MAYOR
 vector<int> orderedModeFill(int size)
 {
     vector<int> vector;
@@ -346,6 +355,7 @@ vector<int> orderedModeFill(int size)
     return vector;
 }
 
+// FUNCIÓN PARA RELLENAR UN VECTOR CON NÚMEROS ORDENADOS DE MAYOR A MENOR
 vector<int> inverselyOrderedModeFill(int size)
 {
     vector<int> vector;
@@ -358,6 +368,7 @@ vector<int> inverselyOrderedModeFill(int size)
     return vector;
 }
 
+// FUNCIÓN PARA ORDENAR UN VECTOR CON EL MÉTODO SELECTION SORT
 double selectionSort(vector<int>& arr)
 {
     int n = arr.size();
@@ -381,6 +392,7 @@ double selectionSort(vector<int>& arr)
     return duration_cast<duration<double>>(end - start).count();
 }
 
+// FUNCIÓN PARA ORDENAR UN VECTOR CON EL MÉTODO BUBBLE SORT
 double bubbleSort(vector<int>& arr)
 {
     int n = arr.size();
@@ -413,6 +425,7 @@ double bubbleSort(vector<int>& arr)
     return duration_cast<duration<double>>(end - start).count();
 }
 
+// FUNCIÓN PARA ORDENAR UN VECTOR CON EL MÉTODO INSERTION SORT
 double insertionSort(vector<int>& arr)
 {
     int n = arr.size();
@@ -436,6 +449,7 @@ double insertionSort(vector<int>& arr)
     return duration_cast<duration<double>>(end - start).count();
 }
 
+// FUNCIÓN PARA ORDENAR UN VECTOR CON EL MÉTODO SHELL SORT
 double shellSort(vector<int>& arr)
 {
     int n = arr.size();
@@ -461,6 +475,7 @@ double shellSort(vector<int>& arr)
     return duration_cast<duration<double>>(end - start).count();
 }
 
+// FUNCIÓN PARA ORDENAR UN VECTOR CON EL MÉTODO MERGE SORT
 double mergeSort(vector<int>& arr, int left, int right)
 {
     auto start = high_resolution_clock::now();
@@ -480,6 +495,7 @@ double mergeSort(vector<int>& arr, int left, int right)
     return duration_cast<duration<double>>(end - start).count();
 }
 
+// FUNCIÓN INCLUIDA CON EL MÉTODO MERGE SORT QUE COMBINA DOS SUBVECTORES ORDENADOS
 void merge(vector<int>& arr, int left, int middle, int right)
 {
     int n1 = middle - left + 1;
@@ -532,6 +548,7 @@ void merge(vector<int>& arr, int left, int middle, int right)
     }
 }
 
+// FUNCIÓN PARA ORDENAR UN VECTOR CON EL MÉTODO QUICK SORT
 double quickSort(vector<int>& arr, int low, int high)
 {
     auto start = high_resolution_clock::now();
@@ -558,6 +575,7 @@ double quickSort(vector<int>& arr, int low, int high)
     return duration_cast<duration<double>>(end - start).count();
 }
 
+// FUNCIÓN INCLUIDA CON EL MÉTODO QUICK SORT QUE REORGANIZA EL VECTOR DE ACUERDO AL PIVOTE
 int partition(vector<int>& arr, int low, int high)
 {
     int pivot = arr[high];
@@ -575,6 +593,7 @@ int partition(vector<int>& arr, int low, int high)
     return (i + 1);
 }
 
+// FUNCIÓN INCLUIDA CON LA FUNCIÓN PARTITION QUE SE ENCARGA DE INTERCAMBIAR VALORES DE DOS VARIABLES
 void swap(int& a, int& b)
 {
     int temp = a;
@@ -582,6 +601,7 @@ void swap(int& a, int& b)
     b = temp;
 }
 
+// FUNCIÓN PARA ORDENAR UN VECTOR CON EL MÉTODO HEAP SORT
 double heapSort(vector<int>& arr)
 {
     int n = arr.size();
@@ -604,6 +624,7 @@ double heapSort(vector<int>& arr)
     return duration_cast<duration<double>>(end - start).count();
 }
 
+// FUNCIÓN INCLUIDA CON EL MÉTODO HEAP SORT QUE SE ENCARGA DE MANTENER LA PROPIEDAD DE HEAP EN UN "SUBÁRBOL" CON "RAÍZ" SEGÚN EL ÍNDICE DADO
 void heapify(vector<int>& arr, int n, int i)
 {
     int largest = i;
@@ -627,11 +648,23 @@ void heapify(vector<int>& arr, int n, int i)
     }
 }
 
+// FUNCIÓN PARA OBTENER UN NÚMERO RANDOM ENTRE LOS LÍMITES INFERIORES Y SUPERIORES DEFINIDOS
+int getRandom(int min, int max)
+{
+    random_device rd;
+    mt19937 generator(rd());
+
+    uniform_int_distribution<int> distribution(min, max);
+
+    return distribution(generator);
+}
+
+// FUNCIÓN PARA COMENZAR LA CARRERA DE ALGORITMOS Y MOSTRAR EN PANTALLA AL GANADOR
 void initRace(vector<int>& aux, vector<int>& arr)
 {
     double timeTaken[7];
     int timeTakenIndex = 0;
-
+   
     aux = arr;
     timeTaken[0] = selectionSort(arr);
     cout << "1. Selection Sort, " << timeTaken[0] << endl;

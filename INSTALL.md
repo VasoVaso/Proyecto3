@@ -1,4 +1,4 @@
-Instrucciones para realizar la instalación
+Instrucciones para realizar la instalación.
 
 1. El programa fue hecho para Windows 10.
 2. Se debe contar con el IDE Visual Studio 2019. 
